@@ -5,7 +5,7 @@ defmodule PrometheusPhx.MixProject do
     [
       app: :prometheus_phx,
       version: "0.1.0",
-      elixir: "~> 1.10",
+      elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: compilers(Mix.env()),
