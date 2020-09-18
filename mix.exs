@@ -4,13 +4,18 @@ defmodule PrometheusPhx.MixProject do
   def project do
     [
       app: :prometheus_phx,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.8",
+      build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: compilers(Mix.env()),
       deps: deps()
     ]
+  end
+
+  def application do
+    [applications: [:logger, :prometheus_ex]]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]

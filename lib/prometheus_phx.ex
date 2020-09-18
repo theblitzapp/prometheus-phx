@@ -15,6 +15,8 @@ defmodule PrometheusPhx do
       [:phoenix, :channel_handled_in]
     ]
 
+    Logger.info "Attaching the phoenix telemetry events: #{inspect events}"
+
     :telemetry.attach_many(
       "telemetry_web__event_handler",
       events,
@@ -61,6 +63,8 @@ defmodule PrometheusPhx do
 
   def handle_event([:phoenix, :endpoint, :stop], %{duration: duration}, metadata, _config) do
     labels = labels(metadata)
+
+    Logger.info "Recording event phoenix_controller_call_duration_#{@duration_unit} for #{inspect labels}"
 
     Histogram.observe(
       [
