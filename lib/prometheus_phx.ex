@@ -119,7 +119,7 @@ defmodule PrometheusPhx do
         status: status,
         conn: %{private: %{phoenix_action: action, phoenix_controller: controller}}
       }) do
-    [controller, action, status]
+    [action, controller, status]
   end
 
   def labels(%{
@@ -128,11 +128,11 @@ defmodule PrometheusPhx do
           private: %{phoenix_action: action, phoenix_controller: controller}
         }
       }) do
-    [controller, action, status]
+    [action, controller, status]
   end
 
   def labels(%{status: status, stacktrace: [{module, function, _, _} | _]}) do
-    [module, function, status]
+    [function, module, status]
   end
 
   def labels(%{event: event, socket: %{channel: channel, topic: topic, transport: transport}}) do

@@ -52,7 +52,7 @@ defmodule PrometheusPhxTest do
       assert {buckets, sum} =
                Histogram.value(
                  name: :phoenix_controller_call_duration_microseconds,
-                 labels: [PrometheusPhxTestWeb.PageController, :index, 200]
+                 labels: [:index, PrometheusPhxTestWeb.PageController, 200]
                )
 
       assert sum > 1_000_000 and sum < 1_200_000
@@ -66,7 +66,7 @@ defmodule PrometheusPhxTest do
       assert {buckets, sum} =
                Histogram.value(
                  name: :phoenix_controller_call_duration_microseconds,
-                 labels: [PrometheusPhxTestWeb.PageController, :error, 422]
+                 labels: [:error, PrometheusPhxTestWeb.PageController, 422]
                )
 
       assert sum > 1_000_000 and sum < 1_200_000
@@ -86,7 +86,7 @@ defmodule PrometheusPhxTest do
       assert {buckets, sum} =
                Histogram.value(
                  name: :phoenix_controller_call_duration_microseconds,
-                 labels: [PrometheusPhxTestWeb.PageController, :raise_error, 500]
+                 labels: [:raise_error, PrometheusPhxTestWeb.PageController, 500]
                )
 
       assert sum > 1_000_000 and sum < 1_200_000
@@ -95,7 +95,7 @@ defmodule PrometheusPhxTest do
       assert {buckets, sum} =
                Histogram.value(
                  name: :phoenix_controller_error_rendered_duration_microseconds,
-                 labels: [PrometheusPhxTestWeb.PageController, :raise_error, 500]
+                 labels: [:raise_error, PrometheusPhxTestWeb.PageController, 500]
                )
 
       assert sum > 1 and sum < 5_000
