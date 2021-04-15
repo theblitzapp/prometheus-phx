@@ -1,7 +1,11 @@
 defmodule PrometheusPhx do
+  @moduledoc """
+  Handle the telemetry messages broadcasted from Phoenix
+
+  To attach to the Phoenix telemetry messages call the `setup/0` function. Then the handlers will receive the messages and write to prometheus.
+  """
   use Prometheus.Metric
 
-  require Logger
   require Prometheus.Contrib.HTTP
   alias Prometheus.Contrib.HTTP
 
@@ -14,8 +18,6 @@ defmodule PrometheusPhx do
       [:phoenix, :channel_joined],
       [:phoenix, :channel_handled_in]
     ]
-
-    Logger.info("Attaching the phoenix telemetry events: #{inspect(events)}")
 
     :telemetry.attach_many(
       "telemetry_web__event_handler",
@@ -61,10 +63,8 @@ defmodule PrometheusPhx do
     )
   end
 
-  def handle_event([:phoenix, :endpoint, :stop] = event, %{duration: duration}, metadata, _config) do
+  def handle_event([:phoenix, :endpoint, :stop], %{duration: duration}, metadata, _config) do
     with labels when is_list(labels) <- labels(metadata) do
-      Logger.info("Recording the phoenix telemetry events: #{inspect(event)}")
-
       Histogram.observe(
         [
           name: :"phoenix_controller_call_duration_#{@duration_unit}",
@@ -76,10 +76,8 @@ defmodule PrometheusPhx do
     end
   end
 
-  def handle_event([:phoenix, :error_rendered] = event, %{duration: duration}, metadata, _config) do
+  def handle_event([:phoenix, :error_rendered], %{duration: duration}, metadata, _config) do
     with labels when is_list(labels) <- labels(metadata) do
-      Logger.info("Recording the phoenix telemetry events: #{inspect(event)}")
-
       Histogram.observe(
         [
           name: :"phoenix_controller_error_rendered_duration_#{@duration_unit}",
@@ -91,10 +89,8 @@ defmodule PrometheusPhx do
     end
   end
 
-  def handle_event([:phoenix, :channel_joined] = event, %{duration: duration}, metadata, _config) do
+  def handle_event([:phoenix, :channel_joined], %{duration: duration}, metadata, _config) do
     with labels when is_list(labels) <- labels(metadata) do
-      Logger.info("Recording the phoenix telemetry events: #{inspect(event)}")
-
       Histogram.observe(
         [
           name: :"phoenix_channel_join_duration_#{@duration_unit}",
@@ -107,14 +103,12 @@ defmodule PrometheusPhx do
   end
 
   def handle_event(
-        [:phoenix, :channel_handled_in] = event,
+        [:phoenix, :channel_handled_in],
         %{duration: duration},
         metadata,
         _config
       ) do
     with labels when is_list(labels) <- labels(metadata) do
-      Logger.info("Recording the phoenix telemetry events: #{inspect(event)}")
-
       Histogram.observe(
         [
           name: :"phoenix_channel_receive_duration_#{@duration_unit}",
