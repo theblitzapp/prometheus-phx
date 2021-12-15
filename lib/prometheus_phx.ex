@@ -13,7 +13,7 @@ defmodule PrometheusPhx do
 
   def setup do
     events = [
-      [:phoenix, :endpoint, :stop],
+      [:phoenix, :router_dispatch, :stop],
       [:phoenix, :error_rendered],
       [:phoenix, :channel_joined],
       [:phoenix, :channel_handled_in]
@@ -63,7 +63,7 @@ defmodule PrometheusPhx do
     )
   end
 
-  def handle_event([:phoenix, :endpoint, :stop], %{duration: duration}, metadata, _config) do
+  def handle_event([:phoenix, :router_dispatch, :stop], %{duration: duration}, metadata, _config) do
     with labels when is_list(labels) <- labels(metadata) do
       Histogram.observe(
         [
